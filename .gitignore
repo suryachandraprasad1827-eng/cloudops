@@ -12,3 +12,4 @@ node_modules/
 .terraform/
 terraform.tfstate
 terraform.tfstate.*
+.venv/
