@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     database_user: str = "cloudops"
     database_password: str = ""
 
+    secret_key: str = ""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
@@ -20,3 +22,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+

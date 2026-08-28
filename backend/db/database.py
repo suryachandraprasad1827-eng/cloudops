@@ -1,7 +1,11 @@
-from sqlalchemy import create_engine, URL
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import URL, create_engine
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from backend.core.config import settings
+
+
+class Base(DeclarativeBase):
+    pass
 
 
 DATABASE_URL = URL.create(
