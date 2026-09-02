@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from backend.core.config import settings
 from backend.db.database import SessionLocal
 from backend.dependencies.auth import get_current_user
+from backend.dependencies.roles import require_admin
 from backend.models.user import User
 from backend.schemas.auth import LoginRequest, TokenResponse
 from backend.schemas.user import UserCreate
@@ -98,4 +99,12 @@ def get_my_profile(current_user: User = Depends(get_current_user)):
         "id": current_user.id,
         "email": current_user.email,
         "is_active": current_user.is_active,
+    }
+@app.get("/admin/test")
+def admin_test(current_user: User = Depends(require_admin)):
+    return {
+        "message": "Admin access granted",
+        "user_id": current_user.id,
+        "email": current_user.email,
+        "role": current_user.role,
     }
