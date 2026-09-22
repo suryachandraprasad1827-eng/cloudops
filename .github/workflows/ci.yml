@@ -14,6 +14,28 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: cloudops
+          POSTGRES_PASSWORD: cloudops
+          POSTGRES_DB: cloudops
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U cloudops -d cloudops"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_USER: cloudops
+      DATABASE_PASSWORD: cloudops
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_PORT: 5432
+      DATABASE_NAME: cloudops
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
