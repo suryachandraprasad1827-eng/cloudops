@@ -1,26 +1,27 @@
-name: CloudOps CI
+name: CloudOps CI/CD
 
 on:
   push:
     branches:
-      - main
       - master
+      - main
   pull_request:
     branches:
-      - main
       - master
+      - main
 
 jobs:
   test:
+    name: Test CloudOps
     runs-on: ubuntu-latest
 
     services:
       postgres:
         image: postgres:16
         env:
+          POSTGRES_DB: cloudops
           POSTGRES_USER: cloudops
           POSTGRES_PASSWORD: cloudops
-          POSTGRES_DB: cloudops
         ports:
           - 5432:5432
         options: >-
@@ -36,12 +37,13 @@ jobs:
       DATABASE_PORT: 5432
       DATABASE_NAME: cloudops
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -51,12 +53,12 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run database migrations
-        run: alembic upgrade head 
+        run: alembic upgrade head
 
-
-      - name: run tests
+      - name: Run tests
         run: pytest
-        build-and-push:
+
+  build-and-push:
     name: Build and push Docker image
     needs: test
     runs-on: ubuntu-latest
