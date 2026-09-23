@@ -35,7 +35,7 @@ jobs:
       DATABASE_HOST: 127.0.0.1
       DATABASE_PORT: 5432
       DATABASE_NAME: cloudops
-
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
