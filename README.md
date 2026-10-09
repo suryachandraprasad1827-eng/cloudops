@@ -3,38 +3,51 @@
 A cloud infrastructure and DevOps project demonstrating infrastructure as code, containerized application deployment, cloud security, and monitoring using AWS and Terraform.
 
 ## Overview
+x
 
 CloudOps deploys a containerized FastAPI application backed by PostgreSQL on AWS EC2. Terraform manages the infrastructure, Amazon ECR stores the application image, Nginx acts as a reverse proxy, and Amazon CloudWatch provides monitoring and alerting.
 
 ## Architecture
+```mermaid
+flowchart TB
+    Dev["Developer"]
+    GitHub["GitHub Repository"]
+    TF["Terraform<br/>Infrastructure as Code"]
 
-```text
-Developer
-   |
-   | Build & Push Docker Image
-   v
-Amazon ECR
-   |
-   | Pull Image
-   v
-Amazon EC2 (Ubuntu)
-   |
-   +-- Nginx (HTTP :80)
-   |      |
-   |      v
-   |   FastAPI Application (:8000)
-   |      |
-   |      v
-   |   PostgreSQL Database
-   |
-   +-- CloudWatch Monitoring
-   |      |
-   |      v
-   |   CPU Utilization Alarm
+    ECR[("Amazon ECR<br/>Private Image Registry")]
 
-Terraform manages AWS infrastructure.
-GitHub stores the project configuration.
+    subgraph AWS["AWS Cloud — ap-southeast-2"]
+        subgraph EC2["Amazon EC2 — Ubuntu"]
+            Nginx["Nginx<br/>HTTP :80"]
+            API["FastAPI<br/>Application :8000"]
+            DB[("PostgreSQL<br/>Database")]
+            Nginx -->|Reverse proxy| API
+            API -->|Database queries| DB
+        end
+
+        IAM["IAM Instance Role"]
+        SG["Security Group<br/>HTTP :80 · Restricted SSH :22"]
+        CW["Amazon CloudWatch<br/>Metrics & CPU Alarm"]
+    end
+
+    Dev -->|Push code| GitHub
+    GitHub -->|Version-controlled config| TF
+    Dev -->|Build and push image| ECR
+    ECR -->|Pull container image| EC2
+    IAM -.->|Authorizes ECR access| EC2
+    SG -.->|Controls network traffic| EC2
+    EC2 -->|Metrics| CW
+
+    classDef app fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef aws fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+    classDef ops fill:#dcfce7,stroke:#16a34a,color:#14532d
+
+    class Nginx,API,DB app
+    class ECR,IAM,SG,CW aws
+    class Dev,GitHub,TF ops
 ```
+
+The diagram illustrates the application flow, container registry, Terraform, IAM, security group, and monitoring.
 
 ## Technology Stack
 
