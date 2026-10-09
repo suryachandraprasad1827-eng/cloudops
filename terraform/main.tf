@@ -35,3 +35,12 @@ resource "aws_instance" "cloudops_server" {
     prevent_destroy = true
   }
 }
+resource "aws_security_group" "cloudops_ec2" {
+  name        = "CloudOps-EC2-SG"
+  description = "CloudOps EC2 server security group"
+  vpc_id      = "vpc-09b4574447c162125"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
