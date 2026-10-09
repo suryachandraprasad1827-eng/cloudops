@@ -13,3 +13,9 @@ node_modules/
 terraform.tfstate
 terraform.tfstate.*
 .venv/
+# Terraform local files and state
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfplan
+terraform/crash.log
