@@ -44,3 +44,26 @@ resource "aws_security_group" "cloudops_ec2" {
     prevent_destroy = true
   }
 }
+
+
+resource "aws_vpc_security_group_ingress_rule" "cloudops_http" {
+  security_group_id = aws_security_group.cloudops_ec2.id
+  ip_protocol       = "tcp"
+  from_port         = 80
+  to_port           = 80
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
+resource "aws_vpc_security_group_ingress_rule" "cloudops_ssh" {
+  security_group_id = aws_security_group.cloudops_ec2.id
+  ip_protocol       = "tcp"
+  from_port         = 22
+  to_port           = 22
+  cidr_ipv4         = "106.214.2.177/32"
+}
+
+resource "aws_vpc_security_group_egress_rule" "cloudops_outbound" {
+  security_group_id = aws_security_group.cloudops_ec2.id
+  ip_protocol       = "-1"
+  cidr_ipv4         = "0.0.0.0/0"
+}
