@@ -61,6 +61,7 @@ jobs:
   build-and-push:
     name: Build and push Docker image
     needs: test
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     permissions:
